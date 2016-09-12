@@ -7,28 +7,24 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace week2_modelfirst
+namespace Olympics
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Athlete
+    public partial class Sport
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Athlete()
+        public Sport()
         {
-            this.Sports = new HashSet<Sport>();
+            this.Athletes = new HashSet<Athlete>();
         }
     
         public int Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public int Age { get; set; }
-        public string Gender { get; set; }
-        public int Country_Id { get; set; }
+        public string Name { get; set; }
+        public string Rules { get; set; }
     
-        public virtual Country Country { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Sport> Sports { get; set; }
+        public virtual ICollection<Athlete> Athletes { get; set; }
     }
 }

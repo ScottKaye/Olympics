@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using week2_modelfirst.Controllers;
+using Olympics.Controllers;
 
-namespace week2_modelfirst
+namespace Olympics
 {
 	class Program
 	{

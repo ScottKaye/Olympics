@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace week2_modelfirst.Controllers
+namespace Olympics.Controllers
 {
 	class CountryController
 	{

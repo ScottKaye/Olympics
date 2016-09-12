@@ -7,8 +7,8 @@
     <ProjectGuid>{4DEE8CFB-A724-4667-A766-32851F8976BC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>week2_modelfirst</RootNamespace>
-    <AssemblyName>week2_modelfirst</AssemblyName>
+    <RootNamespace>Olympics</RootNamespace>
+    <AssemblyName>Olympics</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

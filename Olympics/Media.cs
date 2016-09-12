@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace week2_modelfirst
+namespace Olympics
 {
     using System;
     using System.Collections.Generic;
