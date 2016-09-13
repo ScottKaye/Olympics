@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Olympics.Controllers;
+using ConsoleGUI;
 
 namespace Olympics
 {
@@ -11,8 +12,14 @@ namespace Olympics
 	{
 		static void Main(string[] args)
 		{
-			CountryController ct = new CountryController();
-			ct.Execute();
+			Console.WriteLine("Welcome to the Olympics!");
+
+			while (true)
+			{
+				Menu.LoadMenu<MainController>();
+			}
+
+			Console.ReadKey();
 		}
 	}
 }
