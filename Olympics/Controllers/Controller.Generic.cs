@@ -15,10 +15,10 @@ namespace Olympics.Controllers
 	{
 		public virtual void Create(params Expression<Func<TEntity, object>>[] editableProps)
 		{
-			using (var db = new TContext())
-			{
-				var entity = new TEntity();
+			var entity = new TEntity();
 
+			Contextual(db =>
+			{
 				// Get editable props
 				foreach (var propName in editableProps)
 				{
@@ -27,20 +27,21 @@ namespace Olympics.Controllers
 
 					Console.Write($"{member.Name}: ");
 					string newValue = Console.ReadLine().Trim();
-					propInfo.SetValue(entity, newValue);
+					var casted = Convert.ChangeType(newValue, propInfo.PropertyType);
+					propInfo.SetValue(entity, casted);
 				}
 
 				Console.WriteLine("Saving.");
 				db.Set<TEntity>().Add(entity);
 				db.SaveChanges();
-			}
+			});
 		}
 
 		public virtual void Read(params Expression<Func<TEntity, object>>[] viewableProps)
 		{
 			Console.WriteLine(string.Join(" | ", viewableProps.Select(p => p.Member().Name)));
 
-			using (var db = new TContext())
+			Contextual(db =>
 			{
 				foreach (var entity in db.Set<TEntity>())
 				{
@@ -56,7 +57,7 @@ namespace Olympics.Controllers
 
 					Console.WriteLine(string.Join(" | ", columns));
 				}
-			}
+			});
 		}
 
 		public virtual void Update(params Expression<Func<TEntity, object>>[] editableProps)
@@ -70,7 +71,7 @@ namespace Olympics.Controllers
 
 			Console.WriteLine("Enter nothing to keep the current value.");
 
-			using (var db = new TContext())
+			Contextual(db =>
 			{
 				var entity = db.Set<TEntity>().Find(id);
 
@@ -94,7 +95,7 @@ namespace Olympics.Controllers
 
 				Console.WriteLine("Updating.");
 				db.SaveChanges();
-			}
+			});
 		}
 
 		public virtual void Delete()
@@ -106,11 +107,27 @@ namespace Olympics.Controllers
 				return;
 			}
 
-			using (var db = new TContext())
+			Contextual(db =>
 			{
 				var entity = db.Set<TEntity>().Find(id);
 				db.Set<TEntity>().Remove(entity);
 				db.SaveChanges();
+			});
+		}
+
+		private T Contextual<T>(Func<TContext, T> callback)
+		{
+			using (var db = new TContext())
+			{
+				return callback(db);
+			}
+		}
+
+		private void Contextual(Action<TContext> callback)
+		{
+			using (var db = new TContext())
+			{
+				callback(db);
 			}
 		}
 
