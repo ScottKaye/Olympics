@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Olympics.Controllers
 {
@@ -22,7 +20,7 @@ namespace Olympics.Controllers
 				// Get editable props
 				foreach (var propName in editableProps)
 				{
-					var member = propName.Member();
+					var member = propName.GetMember();
 					var propInfo = typeof(TEntity).GetProperty(member.Name);
 
 					Console.Write($"{member.Name}: ");
@@ -35,11 +33,11 @@ namespace Olympics.Controllers
 				db.Set<TEntity>().Add(entity);
 				db.SaveChanges();
 			});
-		}
+		}2
 
 		public virtual void Read(params Expression<Func<TEntity, object>>[] viewableProps)
 		{
-			Console.WriteLine(string.Join(" | ", viewableProps.Select(p => p.Member().Name)));
+			Console.WriteLine(string.Join(" | ", viewableProps.Select(p => p.GetMember().Name)));
 
 			Contextual(db =>
 			{
@@ -49,7 +47,7 @@ namespace Olympics.Controllers
 
 					foreach (var propName in viewableProps)
 					{
-						var member = propName.Member();
+						var member = propName.GetMember();
 						var propInfo = typeof(TEntity).GetProperty(member.Name);
 						var currentValue = propInfo.GetValue(entity);
 						columns.Add(currentValue.ToString());
@@ -78,7 +76,7 @@ namespace Olympics.Controllers
 				// Get editable props
 				foreach (var propName in editableProps)
 				{
-					var member = propName.Member();
+					var member = propName.GetMember();
 					var propInfo = typeof(TEntity).GetProperty(member.Name);
 
 					var currentValue = propInfo.GetValue(entity);

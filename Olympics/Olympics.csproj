@@ -55,68 +55,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Athlete.cs">
-      <DependentUpon>OlympicsContext.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Athlete.cs" />
     <Compile Include="Controllers\Controller.Generic.cs" />
     <Compile Include="Controllers\IController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Controllers\AthleteController.cs" />
     <Compile Include="Controllers\SportController.cs" />
-    <Compile Include="Country.cs">
-      <DependentUpon>OlympicsContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Media.cs">
-      <DependentUpon>OlympicsContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="OlympicsContext.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OlympicsContext.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="OlympicsContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OlympicsContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="OlympicsContext.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>OlympicsContext.edmx</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Country.cs" />
+    <Compile Include="Models\Medium.cs" />
+    <Compile Include="Models\OlympicsContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sport.cs">
-      <DependentUpon>OlympicsContext.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\Sport.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="OlympicsContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>OlympicsContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="OlympicsContext.edmx.diagram">
-      <DependentUpon>OlympicsContext.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="OlympicsContext.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>OlympicsContext.edmx</DependentUpon>
-      <LastGenOutput>OlympicsContext.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="OlympicsContext.edmx.sql" />
-    <Content Include="OlympicsContext.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>OlympicsContext.edmx</DependentUpon>
-      <LastGenOutput>OlympicsContext.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
