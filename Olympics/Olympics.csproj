@@ -85,6 +85,10 @@
       <Project>{248f73a3-45da-4e91-a8ad-74e309cd75a8}</Project>
       <Name>ConsoleGUI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ContextEditor\ContextEditor.csproj">
+      <Project>{9b626564-cc42-4cdb-b957-704ae004e938}</Project>
+      <Name>ContextEditor</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

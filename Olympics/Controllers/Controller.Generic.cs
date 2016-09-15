@@ -33,7 +33,7 @@ namespace Olympics.Controllers
 				db.Set<TEntity>().Add(entity);
 				db.SaveChanges();
 			});
-		}2
+		}
 
 		public virtual void Read(params Expression<Func<TEntity, object>>[] viewableProps)
 		{

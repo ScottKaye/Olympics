@@ -7,19 +7,19 @@ namespace Olympics.Controllers
 		[MenuItem(Description = "Countries")]
 		public void _c()
 		{
-			Menu.LoadMenu<CountryController>();
+			Menu<CountryController>.Load();
 		}
 
 		[MenuItem(Description = "Sports")]
 		public void _s()
 		{
-			Menu.LoadMenu<SportController>();
+			Menu<SportController>.Load();
 		}
 
 		[MenuItem(Description = "Athletes")]
 		public void _a()
 		{
-			Menu.LoadMenu<AthleteController>();
+			Menu<AthleteController>.Load();
 		}
 	}
 }

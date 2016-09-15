@@ -1,40 +1,67 @@
 ﻿using Common;
 using System;
 using System.Linq;
+using System.Reflection;
+using System.Collections.Generic;
 
 namespace ConsoleGUI
 {
-	public static class Menu
+	public static class Menu<TMenu>
+		where TMenu : class, new()
 	{
-		public static void LoadMenu<TMenu>()
-			where TMenu : class, new()
+		public static void Load()
 		{
-			var menu = new TMenu();
-
 			// Display menu items
-			var methods = menu.GetType().GetMethods()
+			var methods = typeof(TMenu).GetMethods()
 				.Where(m => m.GetCustomAttributes(typeof(MenuItemAttribute), false).Length > 0)
 				.ToList();
 
-			// TODO Console.Table
-			for (int i = 0; i < methods.Count(); ++i)
-			{
-				string name = methods[i].GetAttribute<MenuItemAttribute>()?.Description ?? methods[i].Name;
-				Console.WriteLine($"{i + 1} - {name}");
-			}
+			DrawMenu(methods);
+		}
 
-			// Handle input
-			Console.Write("Choose a menu item: ");
-			int index;
-			if (!int.TryParse(Console.ReadLine(), out index))
+		private static string GetName(MethodInfo method)
+		{
+			return method.GetAttribute<MenuItemAttribute>()?.Description ?? method.Name;
+		}
+
+		private static void DrawMenu(List<MethodInfo> methods, int highlightedIndex = 0)
+		{
+			Console.Clear();
+			if (methods.Count == 0)
 			{
-				Console.WriteLine("Unexpected input.");
+				Console.WriteLine("No methods to list");
 				return;
 			}
 
-			--index;
+			for (int i = 0; i < methods.Count; ++i)
+			{
+				if (i == highlightedIndex)
+				{
+					Console.BackgroundColor = ConsoleColor.Gray;
+					Console.ForegroundColor = ConsoleColor.Black;
+				}
 
-			methods[index].Invoke(menu, null);
+				Console.WriteLine($"{GetName(methods[i])}");
+				Console.ResetColor();
+			}
+
+			// Wait for input
+			var c = Console.ReadKey(false).Key;
+
+			switch (c)
+			{
+				case ConsoleKey.Enter:
+					methods[highlightedIndex].Invoke(new TMenu(), null);
+					break;
+				case ConsoleKey.DownArrow:
+					++highlightedIndex;
+					break;
+				case ConsoleKey.UpArrow:
+					--highlightedIndex;
+					break;
+			}
+
+			DrawMenu(methods, highlightedIndex.Wrap(0, methods.Count - 1));
 		}
 	}
 }
