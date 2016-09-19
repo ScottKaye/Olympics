@@ -1,7 +1,8 @@
 ﻿using Flicker;
-using Newtonsoft.Json;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ContextEditor
 {
@@ -47,28 +48,39 @@ namespace ContextEditor
 
 		public static void DisplayObject(object obj)
 		{
-			Output.Text += JsonConvert.SerializeObject(obj, new JsonSerializerSettings
+			Output.Text += string.Join(", ", obj.GetType().GetPrimitiveProperties().Select(p => $"{p.Name}: {p.GetValue(obj)}"));
+			Output.Text += "\n";
+		}
+
+		public static void DisplaySet(IEnumerable<object> objs)
+		{
+			if (!objs.Any())
 			{
-				MaxDepth = 1,
-				ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-				Formatting = Formatting.Indented
-			}) + "\n";
+				Output.Text += "Empty set";
+				return;
+			}
+
+			var props = objs.First().GetType().GetPrimitiveProperties();
+
+			foreach (var o in objs)
+			{
+				var output = new List<string>();
+
+				foreach (var prop in props)
+				{
+					var value = o.GetType().GetProperty(prop.Name).GetValue(o).ToString();
+					var longestLength = objs.Select(k => k.GetType().GetProperty(prop.Name).GetValue(k).ToString().Length).Max();
+					output.Add(value.PadRight(longestLength));
+				}
+
+				Output.Text += string.Join(" \u2502 ", output);
+				Output.Text += "\n";
+			}
 		}
 
 		public static void DisplaySet(object[] objs)
 		{
-			foreach (var o in objs)
-			{
-				DisplayObject(o);
-			}
-		}
-
-		public static void DisplaySet(IEnumerable objs)
-		{
-			foreach (var o in objs)
-			{
-				DisplayObject(o);
-			}
+			DisplaySet(objs.AsEnumerable());
 		}
 
 		public static void ClearOutput()
