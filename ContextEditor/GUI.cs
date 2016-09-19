@@ -18,24 +18,24 @@ namespace ContextEditor
 		{
 			Renderer = new Renderer();
 
-			MainMenu = new MenuElement(0, 0, 20, 6)
+			MainMenu = new MenuElement(0, 0, .33f, .4f)
 			{
 				Border = '=',
 				Background = ConsoleColor.DarkBlue
 			};
 
-			SubMenu = new MenuElement(20, 0, 30, 6)
+			SubMenu = new MenuElement(.33f, 0, .33f, .4f)
 			{
 				Visible = false
 			};
 
-			NavPropMenu = new MenuElement(50, 0, Console.BufferWidth - 50, 6)
+			NavPropMenu = new MenuElement(.66f, 0, .33f, .4f)
 			{
 				Visible = false,
 				Background = ConsoleColor.DarkRed
 			};
 
-			Output = new TextElement(0, 6, Console.BufferWidth, Console.BufferHeight - 7)
+			Output = new TextElement(0, .4f, 1, .6f)
 			{
 				Border = '-'
 			};
