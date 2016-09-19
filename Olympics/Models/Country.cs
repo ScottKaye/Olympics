@@ -5,11 +5,6 @@ namespace Olympics.Models
 
 	public partial class Country
 	{
-		public Country()
-		{
-			Athletes = new HashSet<Athlete>();
-		}
-
 		public int Id { get; set; }
 
 		[Required]
@@ -17,6 +12,6 @@ namespace Olympics.Models
 
 		public int Population { get; set; }
 
-		public virtual ICollection<Athlete> Athletes { get; set; }
+		public virtual ICollection<Athlete> Athletes { get; set; } = new HashSet<Athlete>();
 	}
 }

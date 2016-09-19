@@ -5,11 +5,6 @@ namespace Olympics.Models
 
 	public partial class Sport
 	{
-		public Sport()
-		{
-			Athletes = new HashSet<Athlete>();
-		}
-
 		public int Id { get; set; }
 
 		[Required]
@@ -18,6 +13,6 @@ namespace Olympics.Models
 		[Required]
 		public string Rules { get; set; }
 
-		public virtual ICollection<Athlete> Athletes { get; set; }
+		public virtual ICollection<Athlete> Athletes { get; set; } = new HashSet<Athlete>();
 	}
 }
