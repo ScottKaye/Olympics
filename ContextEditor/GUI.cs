@@ -20,7 +20,6 @@ namespace ContextEditor
 
 			MainMenu = new MenuElement(0, 0, .33f, .4f)
 			{
-				Border = '=',
 				Background = ConsoleColor.DarkBlue
 			};
 
