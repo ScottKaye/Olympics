@@ -2,16 +2,12 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextEditor
 {
-	static class GUI
+	internal static class GUI
 	{
-		static Renderer Renderer { get; set; }
+		private static Renderer Renderer { get; set; }
 		public static MenuElement MainMenu { get; set; }
 		public static MenuElement SubMenu { get; set; }
 		public static MenuElement NavPropMenu { get; set; }

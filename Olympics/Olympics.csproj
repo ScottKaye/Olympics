@@ -59,12 +59,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Athlete.cs" />
-    <Compile Include="Controllers\Controller.Generic.cs" />
-    <Compile Include="Controllers\IController.cs" />
-    <Compile Include="Controllers\CountryController.cs" />
-    <Compile Include="Controllers\MainController.cs" />
-    <Compile Include="Controllers\AthleteController.cs" />
-    <Compile Include="Controllers\SportController.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\Medium.cs" />
     <Compile Include="Models\OlympicsContext.cs" />
@@ -80,14 +74,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{d9a01b40-db4a-4fb7-90ed-3b77c448dc83}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ConsoleGUI\ConsoleGUI.csproj">
-      <Project>{248f73a3-45da-4e91-a8ad-74e309cd75a8}</Project>
-      <Name>ConsoleGUI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ContextEditor\ContextEditor.csproj">
       <Project>{9b626564-cc42-4cdb-b957-704ae004e938}</Project>
       <Name>ContextEditor</Name>

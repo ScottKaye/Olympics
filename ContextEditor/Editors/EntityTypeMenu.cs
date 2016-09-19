@@ -1,22 +1,15 @@
-﻿using ContextEditor;
-using Flicker;
+﻿using Flicker;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
-using System.Data.Entity.Core.Objects;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ContextEditor.Editors
 {
-	class EntityTypeMenu : MenuItem
+	internal class EntityTypeMenu : MenuItem
 	{
-		DbContext Context { get; set; }
-		EntityType Type { get; set; }
+		private DbContext Context { get; set; }
+		private EntityType Type { get; set; }
 
 		private EntityTypeMenu(DbContext context, EntityType type)
 		{
@@ -35,7 +28,7 @@ namespace ContextEditor.Editors
 			};
 		}
 
-		static void CreateSubMenu<TEntity>(DbContext context, EntityType type)
+		private static void CreateSubMenu<TEntity>(DbContext context, EntityType type)
 			where TEntity : class, new()
 		{
 			var rawType = type.GetCLRType(context);
