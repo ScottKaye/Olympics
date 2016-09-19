@@ -1,5 +1,7 @@
 ﻿using Flicker;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
@@ -159,10 +161,11 @@ namespace ContextEditor.Editors
 								{
 									GUI.ClearOutput();
 
-									var set = context.Set<TEntity>()
-										.AsEnumerable() // AHHHHHHHHHHHHHHHHHH
-										.Select(p => navProp.GetValue(p));
+									int baseId;
+									new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
+									var baseEntity = context.Set<TEntity>().Find(baseId);
 
+									var set = typeof(TEntity).GetProperty(navProp.Name).GetValue(baseEntity) as IEnumerable<object>;
 									GUI.DisplaySet(set);
 								}
 							});

@@ -39,7 +39,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Flicker">
-      <HintPath>..\..\..\Projects\Visual Studio\C#\Flicker\Flicker\bin\Release\Flicker.dll</HintPath>
+      <HintPath>..\..\Flicker\Flicker\bin\Release\Flicker.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
