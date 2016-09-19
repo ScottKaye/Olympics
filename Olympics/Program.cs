@@ -1,9 +1,11 @@
 ﻿using ConsoleGUI;
 using ContextEditor;
 using ContextEditor.Editors;
+using Flicker;
 using Olympics.Controllers;
 using Olympics.Models;
 using System;
+using System.Linq;
 
 namespace Olympics
 {
@@ -11,17 +13,10 @@ namespace Olympics
 	{
 		static void Main(string[] args)
 		{
-			/*var reader = new Reader<OlympicsContext>();
-			var types = reader.GetPOCOs();
-			var editor = new CLI(types);
-			editor.Start();
-
-			Console.ReadKey();
-			return;*/
-
-			Console.WriteLine("Welcome to the Olympics!");
-
-			Menu<MainController>.Load();
+			using (var manager = new ContextManager<OlympicsContext>())
+			{
+				manager.Start();
+			}
 		}
 	}
 }
