@@ -55,7 +55,7 @@ namespace ContextEditor.Editors
 					}
 
 					context.Set<TEntity>().Add(newEntity);
-					context.SaveChanges();
+					context.AttemptSave();
 				}
 			});
 
@@ -92,7 +92,7 @@ namespace ContextEditor.Editors
 						}
 					}
 
-					context.SaveChanges();
+					context.AttemptSave();
 				}
 			});
 
@@ -106,7 +106,7 @@ namespace ContextEditor.Editors
 					var baseEntity = context.Set<TEntity>().Find(baseId);
 
 					context.Set<TEntity>().Remove(baseEntity);
-					context.SaveChanges();
+					context.AttemptSave();
 				}
 			});
 
@@ -115,85 +115,101 @@ namespace ContextEditor.Editors
 
 			// Add navigation props, if they exist
 			var navProps = typeof(TEntity).GetNavProps().ToList();
-			if (navProps.Any())
-			{
-				GUI.NavPropMenu.Visible = true;
 
-				foreach (var prop in navProps)
-				{
-					var navProp = typeof(TEntity).GetProperty(prop.Name);
-
-					dynamic navSet = context.GetType().GetMethods()
-						.Where(m => m.IsGenericMethod)
-						.Single(m => m.Name == "Set")
-						.MakeGenericMethod(new Type[] { prop.PropertyType.GenericTypeArguments[0] })
-						.Invoke(context, null);
-
-					GUI.NavPropMenu.Items.Clear();
-					GUI.NavPropMenu.Items.Add(new MenuItem
-					{
-						Label = prop.Name,
-						Method = () =>
-						{
-							GUI.SubMenu.Items.Clear();
-
-							// Add CRUD actions for this type to sub menu
-							GUI.SubMenu.Items.Add(new MenuItem
-							{
-								Label = $"Add {prop.Name.Singularize()} to {type.Name.Singularize()}",
-								Method = () =>
-								{
-									int navId, baseId;
-									new InputElement<int>(out navId, $"{prop.Name.Singularize()} ID: ");
-									new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
-									var baseEntity = context.Set<TEntity>().Find(baseId);
-									var navEntity = navSet.Find(navId);
-									dynamic collection = typeof(TEntity).GetProperty(prop.Name).GetValue(baseEntity);
-									collection.Add(navEntity);
-									context.SaveChanges();
-								}
-							});
-
-							GUI.SubMenu.Items.Add(new MenuItem
-							{
-								Label = $"List all {prop.Name.Pluralize()} in {type.Name.Singularize()}",
-								Method = () =>
-								{
-									GUI.ClearOutput();
-
-									int baseId;
-									new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
-									var baseEntity = context.Set<TEntity>().Find(baseId);
-
-									var set = typeof(TEntity).GetProperty(navProp.Name).GetValue(baseEntity) as IEnumerable<object>;
-									GUI.DisplaySet(set);
-								}
-							});
-
-							GUI.SubMenu.Items.Add(new MenuItem
-							{
-								Label = $"Remove {prop.Name.Singularize()} from {type.Name.Singularize()}",
-								Method = () =>
-								{
-									int navId, baseId;
-									new InputElement<int>(out navId, $"{prop.Name.Singularize()} ID: ");
-									new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
-									var baseEntity = context.Set<TEntity>().Find(baseId);
-									var navEntity = navSet.Find(navId);
-									dynamic collection = typeof(TEntity).GetProperty(prop.Name).GetValue(baseEntity);
-									collection.Remove(navEntity);
-									context.SaveChanges();
-								}
-							});
-
-							GUI.SubMenu.Select();
-						}
-					});
-				}
-			}
-			else
+			if (!navProps.Any())
 			{
 				GUI.NavPropMenu.Visible = false;
+				return;
+			}
+
+			GUI.NavPropMenu.Visible = true;
+
+			foreach (var prop in navProps)
+			{
+				var navProp = typeof(TEntity).GetProperty(prop.Name);
+
+				dynamic navSet = context.GetType().GetMethods()
+					.Where(m => m.IsGenericMethod)
+					.Single(m => m.Name == "Set")
+					.MakeGenericMethod(new Type[] { prop.PropertyType.GenericTypeArguments[0] })
+					.Invoke(context, null);
+
+				GUI.NavPropMenu.Items.Clear();
+				GUI.NavPropMenu.Items.Add(new MenuItem
+				{
+					Label = prop.Name,
+					Method = () =>
+					{
+						GUI.SubMenu.Items.Clear();
+
+						// Add CRUD actions for this type to sub menu
+						GUI.SubMenu.Items.Add(new MenuItem
+						{
+							Label = $"Add {prop.Name.Singularize()} to {type.Name.Singularize()}",
+							Method = () =>
+							{
+								int navId, baseId;
+								new InputElement<int>(out navId, $"{prop.Name.Singularize()} ID: ");
+								new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
+								var baseEntity = context.Set<TEntity>().Find(baseId);
+								var navEntity = navSet.Find(navId);
+								dynamic collection = typeof(TEntity).GetProperty(prop.Name).GetValue(baseEntity);
+								collection.Add(navEntity);
+								context.AttemptSave();
+							}
+						});
+
+						GUI.SubMenu.Items.Add(new MenuItem
+						{
+							Label = $"List all {prop.Name.Pluralize()} in {type.Name.Singularize()}",
+							Method = () =>
+							{
+								GUI.ClearOutput();
+
+								int baseId;
+								new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
+								var baseEntity = context.Set<TEntity>().Find(baseId);
+
+								var set = typeof(TEntity).GetProperty(navProp.Name).GetValue(baseEntity) as IEnumerable<object>;
+								GUI.DisplaySet(set);
+							}
+						});
+
+						GUI.SubMenu.Items.Add(new MenuItem
+						{
+							Label = $"Remove {prop.Name.Singularize()} from {type.Name.Singularize()}",
+							Method = () =>
+							{
+								int navId, baseId;
+								new InputElement<int>(out navId, $"{prop.Name.Singularize()} ID: ");
+								new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
+								var baseEntity = context.Set<TEntity>().Find(baseId);
+								var navEntity = navSet.Find(navId);
+								dynamic collection = typeof(TEntity).GetProperty(prop.Name).GetValue(baseEntity);
+								collection.Remove(navEntity);
+								context.AttemptSave();
+							}
+						});
+
+						GUI.SubMenu.Select();
+					}
+				});
+			}
+		}
+	}
+
+	static class EntityTypeMenuExtensions
+	{
+		public static void AttemptSave(this DbContext context)
+		{
+			try
+			{
+				context.SaveChanges();
+			}
+			catch (Exception ex)
+			{
+				GUI.ClearOutput();
+				GUI.Output.Text += $"Failed to save changes.  {ex.Message}";
 			}
 		}
 	}
