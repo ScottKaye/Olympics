@@ -1,6 +1,5 @@
 ﻿using Flicker;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
@@ -78,6 +77,8 @@ namespace ContextEditor.Editors
 					new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
 					var baseEntity = context.Set<TEntity>().Find(baseId);
 
+					if (baseEntity == null) return;
+
 					foreach (var primitiveProp in rawType.GetPrimitiveProperties()
 						.Where(p => !type.KeyProperties.Select(k => k.Name).Contains(p.Name)))
 					{
@@ -104,6 +105,8 @@ namespace ContextEditor.Editors
 					int baseId;
 					new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
 					var baseEntity = context.Set<TEntity>().Find(baseId);
+
+					if (baseEntity == null) return;
 
 					context.Set<TEntity>().Remove(baseEntity);
 					context.AttemptSave();
@@ -153,6 +156,9 @@ namespace ContextEditor.Editors
 								new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
 								var baseEntity = context.Set<TEntity>().Find(baseId);
 								var navEntity = navSet.Find(navId);
+
+								if (baseEntity == null || navEntity == null) return;
+
 								dynamic collection = typeof(TEntity).GetProperty(prop.Name).GetValue(baseEntity);
 								collection.Add(navEntity);
 								context.AttemptSave();
@@ -170,6 +176,8 @@ namespace ContextEditor.Editors
 								new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
 								var baseEntity = context.Set<TEntity>().Find(baseId);
 
+								if (baseEntity == null) return;
+
 								var set = typeof(TEntity).GetProperty(navProp.Name).GetValue(baseEntity) as IEnumerable<object>;
 								GUI.DisplaySet(set);
 							}
@@ -185,6 +193,9 @@ namespace ContextEditor.Editors
 								new InputElement<int>(out baseId, $"{type.Name.Singularize()} ID: ");
 								var baseEntity = context.Set<TEntity>().Find(baseId);
 								var navEntity = navSet.Find(navId);
+
+								if (baseEntity == null || navEntity == null) return;
+
 								dynamic collection = typeof(TEntity).GetProperty(prop.Name).GetValue(baseEntity);
 								collection.Remove(navEntity);
 								context.AttemptSave();
