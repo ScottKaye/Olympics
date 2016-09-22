@@ -1,13 +1,11 @@
+using System.Data.Entity;
+
 namespace Olympics.Models
 {
-	using System.Data.Entity;
-
-	public partial class OlympicsContext : DbContext
+	public class OlympicsContext : DbContext
 	{
 		public OlympicsContext()
-			: base("name=OlympicsContext")
-		{
-		}
+			: base("name=OlympicsContext") { }
 
 		public virtual DbSet<Athlete> Athletes { get; set; }
 		public virtual DbSet<Country> Countries { get; set; }

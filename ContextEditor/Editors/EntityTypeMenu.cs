@@ -1,29 +1,23 @@
-﻿using Flicker;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
+using Flicker;
 
 namespace ContextEditor.Editors
 {
 	internal class EntityTypeMenu : MenuItem
 	{
-		private DbContext Context { get; set; }
-		private EntityType Type { get; set; }
-
-		private EntityTypeMenu(DbContext context, EntityType type)
+		private EntityTypeMenu(EntityType type)
 		{
-			Context = context;
-			Type = type;
-
 			Label = type.Name.Singularize();
 		}
 
 		public static EntityTypeMenu Create<TEntity>(DbContext context, EntityType type)
 			where TEntity : class, new()
 		{
-			return new EntityTypeMenu(context, type)
+			return new EntityTypeMenu(type)
 			{
 				Method = () => CreateSubMenu<TEntity>(context, type)
 			};
@@ -64,7 +58,7 @@ namespace ContextEditor.Editors
 				Method = () =>
 				{
 					GUI.ClearOutput();
-					GUI.DisplaySet(context.Set<TEntity>());
+					GUI.DisplaySet(context.Set<TEntity>().ToList<object>());
 				}
 			});
 
@@ -134,7 +128,7 @@ namespace ContextEditor.Editors
 				dynamic navSet = context.GetType().GetMethods()
 					.Where(m => m.IsGenericMethod)
 					.Single(m => m.Name == "Set")
-					.MakeGenericMethod(new Type[] { prop.PropertyType.GenericTypeArguments[0] })
+					.MakeGenericMethod(prop.PropertyType.GenericTypeArguments[0])
 					.Invoke(context, null);
 
 				GUI.NavPropMenu.Items.Clear();
@@ -179,7 +173,7 @@ namespace ContextEditor.Editors
 								if (baseEntity == null) return;
 
 								var set = typeof(TEntity).GetProperty(navProp.Name).GetValue(baseEntity) as IEnumerable<object>;
-								GUI.DisplaySet(set);
+								if (set != null) GUI.DisplaySet(set.ToList());
 							}
 						});
 
@@ -209,7 +203,7 @@ namespace ContextEditor.Editors
 		}
 	}
 
-	static class EntityTypeMenuExtensions
+	internal static class EntityTypeMenuExtensions
 	{
 		public static void AttemptSave(this DbContext context)
 		{

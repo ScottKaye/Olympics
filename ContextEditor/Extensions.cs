@@ -14,20 +14,22 @@ namespace ContextEditor
 	internal static class Extensions
 	{
 		/// <summary>
-		/// Resolve an EntityType to a CLR type.  Since the CLR types are internal to EF, we have to check the namespace directly...
+		///     Resolve an EntityType to a CLR type.  Since the CLR types are internal to EF, we have to check the namespace
+		///     directly...
 		/// </summary>
 		/// Author: http://stackoverflow.com/a/24128797/382456
 		/// <param name="type">Entity type to resolve</param>
+		/// <param name="adapter">Database adapter containing metadata</param>
 		/// <returns>Resolved entity type</returns>
 		internal static Type GetCLRType(this EntityType type, ObjectContext adapter)
 		{
 			return (Type)
 				adapter.MetadataWorkspace
-				.GetItems<EntityType>(DataSpace.CSpace)
-				.Single(s => s.FullName == type.FullName)
-				.MetadataProperties
-				.Single(p => p.Name == "http://schemas.microsoft.com/ado/2013/11/edm/customannotation:ClrType")
-				.Value;
+					.GetItems<EntityType>(DataSpace.CSpace)
+					.Single(s => s.FullName == type.FullName)
+					.MetadataProperties
+					.Single(p => p.Name == "http://schemas.microsoft.com/ado/2013/11/edm/customannotation:ClrType")
+					.Value;
 		}
 
 		internal static Type GetCLRType(this EntityType type, DbContext context)

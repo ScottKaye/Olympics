@@ -1,9 +1,9 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+
 namespace Olympics.Models
 {
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-
-	public partial class Country
+	public class Country
 	{
 		public int Id { get; set; }
 

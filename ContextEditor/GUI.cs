@@ -1,19 +1,12 @@
-﻿using Flicker;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Flicker;
 
 namespace ContextEditor
 {
 	internal static class GUI
 	{
-		private static Renderer Renderer { get; set; }
-		public static MenuElement MainMenu { get; set; }
-		public static MenuElement SubMenu { get; set; }
-		public static MenuElement NavPropMenu { get; set; }
-		public static TextElement Output { get; set; }
-
 		static GUI()
 		{
 			Renderer = new Renderer();
@@ -45,13 +38,19 @@ namespace ContextEditor
 			Renderer.Register(Output);
 		}
 
+		private static Renderer Renderer { get; }
+		public static MenuElement MainMenu { get; set; }
+		public static MenuElement SubMenu { get; set; }
+		public static MenuElement NavPropMenu { get; set; }
+		public static TextElement Output { get; set; }
+
 		public static void DisplayObject(object obj)
 		{
 			Output.Text += string.Join(", ", obj.GetType().GetPrimitiveProperties().Select(p => $"{p.Name}: {p.GetValue(obj)}"));
 			Output.Text += "\n";
 		}
 
-		public static void DisplaySet(IEnumerable<object> objs)
+		public static void DisplaySet(ICollection<object> objs)
 		{
 			if (!objs.Any())
 			{
@@ -59,27 +58,18 @@ namespace ContextEditor
 				return;
 			}
 
-			var props = objs.First().GetType().GetPrimitiveProperties();
+			var props = objs.First().GetType().GetPrimitiveProperties().ToList();
 
 			foreach (var o in objs)
 			{
-				var output = new List<string>();
-
-				foreach (var prop in props)
-				{
-					var value = o.GetType().GetProperty(prop.Name).GetValue(o).ToString();
-					var longestLength = objs.Select(k => k.GetType().GetProperty(prop.Name).GetValue(k).ToString().Length).Max();
-					output.Add(value.PadRight(longestLength));
-				}
+				var output = (from prop in props
+							  let value = o.GetType().GetProperty(prop.Name).GetValue(o).ToString()
+							  let longestLength = objs.Select(k => k.GetType().GetProperty(prop.Name).GetValue(k).ToString().Length).Max()
+							  select value.PadRight(longestLength)).ToList();
 
 				Output.Text += string.Join(" \u2502 ", output);
 				Output.Text += "\n";
 			}
-		}
-
-		public static void DisplaySet(object[] objs)
-		{
-			DisplaySet(objs.AsEnumerable());
 		}
 
 		public static void ClearOutput()
